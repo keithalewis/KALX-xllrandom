@@ -3,3 +3,37 @@
 ################################################################################
 
 *.ipch
+*.suo
+/.vs/xllrandom/v15/Solution.VC.db-wal
+/.vs/xllrandom/v15/Solution.VC.db-shm
+/.vs/xllrandom/v15/Solution.VC.db
+/.vs/xllrandom/v15/Browse.VC.opendb
+/.vs/xllrandom/v15/Browse.VC.db
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
+/.vs/ProjectSettings.json
+/Debug/xllrandom.tlog/xllrandom.write.1u.tlog
+/Debug/xllrandom.tlog/xllrandom.lastbuildstate
+/Debug/xllrandom.tlog/link.write.1.tlog
+/Debug/xllrandom.tlog/link.read.1.tlog
+/Debug/xllrandom.tlog/link.command.1.tlog
+/Debug/xllrandom.tlog/link.6584.delete.1.tlog
+/Debug/xllrandom.tlog/CL.write.1.tlog
+/Debug/xllrandom.tlog/CL.read.1.tlog
+/Debug/xllrandom.tlog/CL.command.1.tlog
+/Debug/xllrandom.xll
+/Debug/xllrandom.shfbproj
+/Debug/xllrandom.pdb
+/Debug/xllrandom.obj
+/Debug/xllrandom.log
+/Debug/xllrandom.lib
+/Debug/xllrandom.ilk
+/Debug/xllrandom.exp
+/Debug/xllrandom.aml
+/Debug/xll12.xml
+/Debug/xll12.pdb
+/Debug/xll12.lib
+/Debug/vc141.pdb
+/Debug/map.h
+/Debug/Content Layout.content
+/Debug/alias.txt

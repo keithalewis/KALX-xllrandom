@@ -4,10 +4,11 @@
 
 using namespace xll;
 
+using random::dre;
+
 #ifdef _DEBUG
-static AddInX xai_random(
-	DocumentX(CATEGORY)
-	.Documentation(R_(
+static AddIn xai_random(
+	Documentation(LR"xyzzyx(
 This library calls the C++ <codeInline>&lt;random&gt;</codeInline> library.
 The function <codeInline>RANDOM.ENGINE(Type, ?Seed)</codeInline> creates a 
 random number generator <em>engine</em> of a given type with optional seed.
@@ -16,10 +17,80 @@ The types of engines available start with RANDOM_ENGINE_*.
 The function <codeInline>RANDOM.DISTRIBUTION(Type, ?Params...)</codeInline> creates
 a random number <em>distribution</em> of a given type with optional parameters.
 The types of distributions available start with RANDOM_DISTRIBUTION_*.
-))
+)xyzzyx")
 );
 #endif // _DEBUG
 
+static AddIn xai_uniform_real_distribution(
+    Function(XLL_HANDLE, L"?xll_uniform_real_distribution", L"RANDOM.UNIFORM.REAL.DISTRIBUTION")
+    .Arg(XLL_DOUBLE, L"a", L"is the minimum bound of the distribution. Default is 0.")
+    .Arg(XLL_DOUBLE, L"b", L"is the maximum bound of the distribution. Default is 1.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return handle to uniformly distributed variates on the interval [a, b).")
+);
+HANDLEX WINAPI xll_uniform_real_distribution(double a, double b)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        if (a == 0 && b == 0) {
+            b = 1;
+        }
+        handle<random::variate> h(new random::uniform_real_variate(std::uniform_real_distribution<double>(a,b), dre));
+        result = h.get();
+    }
+    catch (const std::exception& ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+inline LPXLOPER12 variate_fill(handle<random::variate>& rv)
+{
+    LPXLOPER12 px;
+    XLOPER12 ref, coerce;
+    ensure (xlretSuccess == Excel12(xlfCaller, &ref, 0));
+    ensure (xlretSuccess == Excel12(xlCoerce, &coerce, 1, &ref));
+
+    size_t n = coerce.val.array.rows * coerce.val.array.columns;
+    rv->fill(n, &coerce.val.array.lparray[0]);
+
+    coerce.xltype |= xlbitXLFree;
+    px = &coerce; 
+   
+    return px;    
+}
+
+static AddIn xai_uniform_real_distribution_variate(
+    Function(XLL_LPXLOPER, L"?xll_uniform_real_distribution_variate", L"RANDOM.UNIFORM.REAL.DISTRIBUTION.VARIATE")
+    .Arg(XLL_HANDLE, L"handle", L"is a handle returned by RANDOM.UNIFORM.REAL.DISTRIBUTION.")
+    .Uncalced()
+    .Volatile()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return uniformly distributed variates.")
+);
+LPXLOPER12 WINAPI xll_uniform_real_distribution_variate(HANDLEX urd)
+{
+#pragma XLLEXPORT
+    LPXLOPER12 px = 0;
+
+    try {
+        handle<random::variate> h(urd);
+        ensure (h);
+
+        px = variate_fill(h);
+    }
+    catch (const std::exception& ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return px;
+}
+
+#if 0
 template<class T>
 T random_variate(HANDLEX d, HANDLEX e)
 {
@@ -202,7 +273,7 @@ xll_generator_ranlux64_base_01(double seed)
 //
 // Distributions
 //
-#if 0
+//#if 0
 static AddInX xai_distribution_gamma(
 	FunctionX(XLL_HANDLEX XLL_UNCALCEDX, _T("?xll_distribution_gamma"), _T("DISTRIBUTION.GAMMA"))
 	.Arg(XLL_DOUBLEX, _T("Alpha"), _T("is a the mean."))
@@ -314,7 +385,7 @@ xll_distribution_poisson(double lambda)
 	
 	return h;
 }
-#endif // 0
+
 
 #ifdef _DEBUG
 int
@@ -335,3 +406,4 @@ test_random(void)
 }
 static Auto<OpenAfter> xao_test_random(test_random);
 #endif //
+#endif // 0
