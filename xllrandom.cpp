@@ -3,7 +3,7 @@
 #include "xllrandom.h"
 
 using namespace xll;
-
+/*
 #ifdef _DEBUG
 static AddInX xai_random(
 	DocumentX(CATEGORY)
@@ -19,7 +19,7 @@ The types of distributions available start with RANDOM_DISTRIBUTION_*.
 ))
 );
 #endif // _DEBUG
-
+*/
 template<class T>
 T random_variate(HANDLEX d, HANDLEX e)
 {
@@ -30,9 +30,9 @@ T random_variate(HANDLEX d, HANDLEX e)
 }
 
 static AddInX xai_random_bool(
-	FunctionX(XLL_BOOLX, _T("?xll_random_bool"), _T("RANDOM.BOOL"))
-	.Arg(XLL_HANDLEX, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
-	.Arg(XLL_HANDLEX, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
+	FunctionX(XLL_BOOL, _T("?xll_random_bool"), _T("RANDOM.BOOL"))
+	.Arg(XLL_HANDLE, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
+	.Arg(XLL_HANDLE, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
 	.Volatile()
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Returns an boolean valued random variate."))
@@ -57,9 +57,9 @@ xll_random_bool(HANDLEX dist, HANDLEX eng)
 	return h;
 }
 static AddInX xai_random_int(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_int"), _T("RANDOM.INT"))
-	.Arg(XLL_HANDLEX, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
-	.Arg(XLL_HANDLEX, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
+	FunctionX(XLL_DOUBLE, _T("?xll_random_int"), _T("RANDOM.INT"))
+	.Arg(XLL_HANDLE, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
+	.Arg(XLL_HANDLE, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
 	.Volatile()
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Returns an integer valued random variate."))
@@ -84,9 +84,9 @@ xll_random_int(HANDLEX dist, HANDLEX eng)
 	return h;
 }
 static AddInX xai_random_double(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_double"), _T("RANDOM.REAL"))
-	.Arg(XLL_HANDLEX, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
-	.Arg(XLL_HANDLEX, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
+	FunctionX(XLL_DOUBLE, _T("?xll_random_double"), _T("RANDOM.REAL"))
+	.Arg(XLL_HANDLE, _T("Distribution"), _T("is a handle to a distribution returned by RANDOM.DISTRIBUTION."))
+	.Arg(XLL_HANDLE, _T("Engine"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
 	.Uncalced()
 	.Volatile()
 	.Category(CATEGORY)
@@ -133,8 +133,8 @@ static AddInX xai_generate_variate(
 		_T("specified in the call to <codeInline>VARIATE.GENERATOR</codeInline>. ")
 	)
 );
-xfp* WINAPI
-xll_generate_variate(HANDLEX vg, xword r, xword c)
+_FP12* WINAPI
+xll_generate_variate(HANDLEX vg, WORD r, WORD c)
 {
 #pragma XLLEXPORT
 	static FPX x;
@@ -149,7 +149,7 @@ xll_generate_variate(HANDLEX vg, xword r, xword c)
 		ensure(pvg);
 
 		x.reshape(r, c);
-		for (xword i = 0; i < x.size(); ++i)
+		for (WORD i = 0; i < x.size(); ++i)
 			x[i] = (*pvg)(); // call virtual operator()
 	}
 	catch (const std::exception& ex) {
@@ -333,5 +333,5 @@ test_random(void)
 
 	return 1;
 }
-static Auto<OpenAfter> xao_test_random(test_random);
+static Auto<Open> xao_test_random(test_random);
 #endif //

@@ -34,15 +34,15 @@ enum Distribution { DISTRIBUTION(ENUM_) };
 
 #define HASH_(x) #x
 #define XLL_ENUM_(a,b,c,d,e,f) XLL_ENUM(RANDOM_DISTRIBUTION_##a, RANDOM_DISTRIBUTION_##a, "Random", f ". Parameters: " HASH_(UNPAREN(e)))
-DISTRIBUTION(XLL_ENUM_)
+//DISTRIBUTION(XLL_ENUM_)
 
 using namespace xll;
 
 static AddInX xai_random_distribution(
-	FunctionX(XLL_HANDLEX, _T("?xll_random_distribution"), _T("RANDOM.DISTRIBUTION"))
-	.Arg(XLL_USHORTX, _T("Type"), _T("is a the type of distribution from RANDOM_DISTRIBUTION_*."),
+	FunctionX(XLL_HANDLE, _T("?xll_random_distribution"), _T("RANDOM.DISTRIBUTION"))
+	.Arg(XLL_USHORT, _T("Type"), _T("is a the type of distribution from RANDOM_DISTRIBUTION_*."),
 		_T("=RANDOM_DISTRIBUTION_UNIFORM_REAL()"))
-	.Arg(XLL_LPOPERX, _T("?Params"), _T("are optional parameters to the distribution."),
+	.Arg(XLL_LPOPER, _T("?Params"), _T("are optional parameters to the distribution."),
 		_T("={0,1}"))
 	.Uncalced()
 	.Category(CATEGORY)
@@ -51,7 +51,7 @@ static AddInX xai_random_distribution(
 	)
 );
 HANDLEX WINAPI
-xll_random_distribution(USHORT type, LPOPERX px)
+xll_random_distribution(USHORT type, LPOPER px)
 {
 #pragma XLLEXPORT
 	handlex h;
@@ -64,7 +64,7 @@ xll_random_distribution(USHORT type, LPOPERX px)
 				new distribution::base<c,std:: ## b, d>(*px); \
 			h = hd.get(); break; }
 
-			DISTRIBUTION(CASE_)
+			//DISTRIBUTION(CASE_)
 
 		default:
 			throw std::runtime_error("RANDOM.DISTRIBUTION: unknown distribution type");
@@ -78,8 +78,8 @@ xll_random_distribution(USHORT type, LPOPERX px)
 }
 
 static AddInX xai_random_distribution_min(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_distribution_min"), _T("RANDOM.DISTRIBUTION.MIN"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle to a distribution from RANDOM.DISTRIBUTION.*."))
+	FunctionX(XLL_DOUBLE, _T("?xll_random_distribution_min"), _T("RANDOM.DISTRIBUTION.MIN"))
+	.Arg(XLL_HANDLE, _T("Handle"), _T("is a handle to a distribution from RANDOM.DISTRIBUTION.*."))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Return the minimum value a distribution can take."))
 	.Documentation(
@@ -90,7 +90,7 @@ xll_random_distribution_min(HANDLEX dist)
 {
 #pragma XLLEXPORT
 	try {
-		handle<distribution::base_distribution<double>> hd(dist, false);
+		handle<distribution::base_distribution<double>> hd(dist);
 		if (hd)
 			return hd->min();
 
@@ -105,8 +105,8 @@ xll_random_distribution_min(HANDLEX dist)
 	return std::numeric_limits<double>::quiet_NaN();
 }
 static AddInX xai_random_distribution_max(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_distribution_max"), _T("RANDOM.DISTRIBUTION.MAX"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle to a distribution from RANDOM.DISTRIBUTION.*."))
+	FunctionX(XLL_DOUBLE, _T("?xll_random_distribution_max"), _T("RANDOM.DISTRIBUTION.MAX"))
+	.Arg(XLL_HANDLE, _T("Handle"), _T("is a handle to a distribution from RANDOM.DISTRIBUTION.*."))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Return the maximum value a distribution can take."))
 	.Documentation(
@@ -117,7 +117,7 @@ xll_random_distribution_max(HANDLEX dist)
 {
 #pragma XLLEXPORT
 	try {
-		handle<distribution::base_distribution<double>> hd(dist, false);
+		handle<distribution::base_distribution<double>> hd(dist);
 		if (hd)
 			return hd->max();
 
@@ -137,7 +137,7 @@ xll_random_distribution_max(HANDLEX dist)
 int xll_test_random_distribution(void)
 {
 	try {
-		OPERX p{OPERX(0),OPERX(10)};
+		OPER p{OPER(0),OPER(10)};
 
 		HANDLEX h = xll_random_distribution(RANDOM_DISTRIBUTION_UNIFORM_REAL, &p);
 		handle<distribution::base_distribution<double>> hd(h);
@@ -152,6 +152,6 @@ int xll_test_random_distribution(void)
 
 	return TRUE;
 }
-static Auto<OpenAfter> xao_test_random_distribution(xll_test_random_distribution);
+static Auto<Open> xao_test_random_distribution(xll_test_random_distribution);
 
 #endif // _DEBUG

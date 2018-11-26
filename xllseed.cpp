@@ -5,8 +5,8 @@
 using namespace xll;
 
 static AddInX xai_seed_seq(
-	FunctionX(XLL_HANDLEX, _T("?xll_seed_seq"), _T("RANDOM.SEED.SEQ"))
-	.Arg(XLL_LPOPERX, _T("Seed"), _T("is an array of 32-bit unsigned numbers. "))
+	FunctionX(XLL_HANDLE, _T("?xll_seed_seq"), _T("RANDOM.SEED.SEQ"))
+	.Arg(XLL_LPOPER, _T("Seed"), _T("is an array of 32-bit unsigned numbers. "))
 	.Uncalced()
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Return a handle to a std::seed_seq. "))
@@ -15,7 +15,7 @@ static AddInX xai_seed_seq(
 	)
 );
 HANDLEX WINAPI
-xll_seed_seq(const LPOPERX ps)
+xll_seed_seq(const LPOPER ps)
 {
 	handlex h;
 #pragma XLLEXPORT
@@ -31,16 +31,16 @@ xll_seed_seq(const LPOPERX ps)
 }
 
 static AddInX xai_seed_seq_generate(
-	FunctionX(XLL_FPX, _T("?xll_seed_seq_generate"), _T("RANDOM.SEED.SEQ.GENERATE"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle returned by RANDOM.SEED.SEQ."))
-	.Arg(XLL_WORDX, _T("Count"), _T("is the number of new seeds to generate. "))
+	FunctionX(XLL_FP, _T("?xll_seed_seq_generate"), _T("RANDOM.SEED.SEQ.GENERATE"))
+	.Arg(XLL_HANDLE, _T("Handle"), _T("is a handle returned by RANDOM.SEED.SEQ."))
+	.Arg(XLL_WORD, _T("Count"), _T("is the number of new seeds to generate. "))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Generate new seeds from old seeds. "))
 	.Documentation(
 	)
 );
-xfp* WINAPI
-xll_seed_seq_generate(HANDLEX h, xword n)
+_FP12* WINAPI
+xll_seed_seq_generate(HANDLEX h, WORD n)
 {
 #pragma XLLEXPORT
 	static FPX s;
@@ -68,24 +68,24 @@ xll_seed_seq_generate(HANDLEX h, xword n)
 }
 
 static AddInX xai_seed_seq_param(
-	FunctionX(XLL_FPX, _T("?xll_seed_seq_param"), _T("RANDOM.SEED.SEQ.PARAM"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle returned by SEED.SEQ. "))
+	FunctionX(XLL_FP, _T("?xll_seed_seq_param"), _T("RANDOM.SEED.SEQ.PARAM"))
+	.Arg(XLL_HANDLE, _T("Handle"), _T("is a handle returned by SEED.SEQ. "))
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Return the seed sequence as a one column array. "))
 	.Documentation(
 		_T("The return value can be used as an argument to <codeInline>RANDOM.SEED.SEQ</codeInline>. ")
 	)
 );
-xfp* WINAPI
+_FP12* WINAPI
 xll_seed_seq_param(HANDLEX h)
 {
 #pragma XLLEXPORT
-	static FPX s;
+	static xll::FP12 s;
 
 	try {
 		handle<engine::seed> h_(h);
 
-		s.reshape(static_cast<xword>(h_->size()), 1);
+		s.resize(static_cast<WORD>(h_->size()), 1);
 		h_->param(s.begin());
 	}
 	catch (const std::exception& ex) {

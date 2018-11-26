@@ -17,15 +17,15 @@ X(MT19937_64, mt19937_64, "Generates a high quality random sequence of integers 
 #define ENUM_(a,b,c) RANDOM_ENGINE_ ## a,
 enum Engine { ENGINE(ENUM_) };
 
-#define XLL_ENUM_(a,b,c) XLL_ENUM(RANDOM_ENGINE_##a, RANDOM_ENGINE_##a, "Random", c)
+#define XLL_ENUM_(a,b,c) XLL_ENUM(RANDOM_ENGINE_##a, RANDOM_ENGINE_##a, L"Random", L##c)
 ENGINE(XLL_ENUM_)
 
 using namespace xll;
 
 static AddInX xai_random_engine(
-	FunctionX(XLL_HANDLEX, _T("?xll_random_engine"), _T("RANDOM.ENGINE"))
-	.Arg(XLL_USHORTX, _T("Type"), _T("is an enumeration from RANDOM_ENGINE_*."))
-	.Arg(XLL_LPOPERX, _T("?Seed"), _T("is an optional array of numbers to seed the Engine."))
+	FunctionX(XLL_HANDLE, _T("?xll_random_engine"), _T("RANDOM.ENGINE"))
+	.Arg(XLL_USHORT, _T("Type"), _T("is an enumeration from RANDOM_ENGINE_*."))
+	.Arg(XLL_LPOPER, _T("?Seed"), _T("is an optional array of numbers to seed the Engine."))
 	.Uncalced()
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Returns a handle to a random variate generator of type Engine."))
@@ -35,7 +35,7 @@ static AddInX xai_random_engine(
 #pragma warning(push)
 #pragma warning(disable: 4244)
 HANDLEX WINAPI
-xll_random_engine(USHORT eng, LPOPERX pseed)
+xll_random_engine(USHORT eng, LPOPER pseed)
 {
 #pragma XLLEXPORT
 	handlex h;
@@ -43,7 +43,7 @@ xll_random_engine(USHORT eng, LPOPERX pseed)
 	try {
 		engine::seed ss{*pseed}, *pss{&ss};
 
-		const OPERX& s((*pseed)[0]);
+		const OPER& s((*pseed)[0]);
 		if (pseed->size() == 1 && s.xltype == xltypeNum) {
 			handle<engine::seed> hs(s.val.num, false);
 			if (hs)
@@ -70,59 +70,3 @@ xll_random_engine(USHORT eng, LPOPERX pseed)
 	return h;
 }
 #pragma warning(pop)
-
-static AddInX xai_random_engine_min(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_engine_min"), _T("RANDOM.ENGINE.MIN"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
-	.Category(CATEGORY)
-	.FunctionHelp(_T("Returns the minimum value returned by the engine corresponding to Handle."))
-	.Documentation(
-	)
-);
-double WINAPI
-xll_random_engine_min(HANDLEX eng)
-{
-#pragma XLLEXPORT
-	double h{std::numeric_limits<double>::max()};
-
-	try {
-		handle<engine::base_engine<>> he(eng);
-
-		h = he->min();
-	}
-	catch (const std::exception& ex) {
-		XLL_ERROR(ex.what());
-
-		return h;
-	}
-
-	return h;
-}
-static AddInX xai_random_engine_max(
-	FunctionX(XLL_DOUBLEX, _T("?xll_random_engine_max"), _T("RANDOM.ENGINE.MAX"))
-	.Arg(XLL_HANDLEX, _T("Handle"), _T("is a handle to a random engine returned by RANDOM.ENGINE."))
-	.Category(CATEGORY)
-	.FunctionHelp(_T("Returns the maximum value returned by the engine corresponding to Handle."))
-	.Documentation(
-	)
-);
-double WINAPI
-xll_random_engine_max(HANDLEX eng)
-{
-#pragma XLLEXPORT
-	double h{std::numeric_limits<double>::max()};
-
-	try {
-		handle<engine::base_engine<>> he(eng);
-
-		h = he->max();
-	}
-	catch (const std::exception& ex) {
-		XLL_ERROR(ex.what());
-
-		return h;
-	}
-
-	return h;
-}
-

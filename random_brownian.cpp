@@ -15,11 +15,12 @@ static generator::seed<mt19937> s(random::default_random());
 static auto normal = std::normal_distribution<double>();
 
 static AddInX xai_random_brownian(
-	FunctionX(XLL_FPX XLL_VOLATILEX, _T("?xll_random_brownian"), _T("RANDOM.BROWNIAN"))
-	.Arg(XLL_FPX, _T("Times"), _T("is an array of times at which to sample Brownian motion"))
-	.Arg(XLL_DOUBLEX, _T("Mu"), _T("is the drift rate of the Brownian Motion"))
-	.Arg(XLL_DOUBLEX, _T("Sigma"), _T("is the standard deviation at time 1"))
-	.Arg(XLL_BOOLX, _T("Reset"), _T("is a boolean seed for reseting the random seed. "))
+	FunctionX(XLL_FP, _T("?xll_random_brownian"), _T("RANDOM.BROWNIAN"))
+	.Arg(XLL_FP, _T("Times"), _T("is an array of times at which to sample Brownian motion"))
+	.Arg(XLL_DOUBLE, _T("Mu"), _T("is the drift rate of the Brownian Motion"))
+	.Arg(XLL_DOUBLE, _T("Sigma"), _T("is the standard deviation at time 1"))
+	.Arg(XLL_BOOL, _T("Reset"), _T("is a boolean seed for reseting the random seed. "))
+    .Volatile()
 	.Category(CATEGORY)
 	.FunctionHelp(_T("Return a sample path at Times with drift Mu and standard deviation Sigma"))
 	.Documentation(
@@ -28,8 +29,8 @@ static AddInX xai_random_brownian(
 		_T("standard deviation at time <math>t</math> is <math>") ENT_sigma ENT_radic _T("</math>. ")
 	)
 );
-xfp* WINAPI
-xll_random_brownian(xfp* pt, double mu, double sigma, BOOL reset)
+_FP12* WINAPI
+xll_random_brownian(_FP12* pt, double mu, double sigma, BOOL reset)
 {
 #pragma XLLEXPORT
 
@@ -48,7 +49,7 @@ xll_random_brownian(xfp* pt, double mu, double sigma, BOOL reset)
 		else
 			pt->array[0] = mu*pt->array[0];
 
-		for (xword i = 1; i < size(*pt); ++i) {
+		for (WORD i = 1; i < size(*pt); ++i) {
 			double t = pt->array[i];
 			ensure (t > t0);
 			pt->array[i] = pt->array[i - 1] + mu*(t - t0) + sigma*sqrt(t - t0)*normal(random::default_random());
