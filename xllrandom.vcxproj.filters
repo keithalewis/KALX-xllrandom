@@ -25,15 +25,6 @@
     <ClCompile Include="random_brownian.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xllseed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xllengine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xlldistribution.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.txt" />

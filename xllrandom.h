@@ -3,17 +3,44 @@
 // Uncomment the following line to use features for Excel2007 and above.
 //#define EXCEL12
 #pragma once
-#define NOMINMAX
-#include <sstream>
 #include <random>
-#include <utility>
-#include "../xll12/xll/xll.h"
-
-#undef _T
-#define _T(x) L##x
+#include "xll12/xll/xll.h"
 
 #ifndef CATEGORY
-#define CATEGORY _T("Random")
+#define CATEGORY L"Random"
 #endif
+
+namespace random {
+
+    inline std::default_random_engine dre;
+
+    // random engine interface
+    struct variate {
+        void fill(size_t n, LPXLOPER12 px)
+        {
+            _fill(n, px);
+        }
+    private:
+        virtual void _fill(size_t n, LPXLOPER12 px) = 0;
+    };
+
+    template<class R>
+    struct uniform_real_variate : public variate {
+        std::uniform_real_distribution<double> u;
+        R& r;
+        uniform_real_variate(std::uniform_real_distribution<double> u, R& r)
+            : u(u), r(r)
+        { }
+        void _fill(size_t n, LPXLOPER12 px) override
+        {
+            while (n--) {
+                px->xltype = xltypeNum;
+                px->val.num = u(r);
+                ++px;
+            }
+        }
+    };
+
+} // namespace random
 
 

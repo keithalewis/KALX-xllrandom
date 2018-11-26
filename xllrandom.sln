@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xllrandom", "xllrandom.vcxproj", "{2E028EEF-104B-4493-ADE6-5471F507DE48}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xll12", "..\xll12\xll12.vcxproj", "{3563C165-8A72-4BE5-B8AF-FD5904C9030E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xll12", "xll12\xll12.vcxproj", "{3563C165-8A72-4BE5-B8AF-FD5904C9030E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,7 +34,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {AFFD7AA7-4114-470D-87B0-0CE4E9E9B334}
+		SolutionGuid = {20B26093-0896-42E9-9356-97FA2B34B76A}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
